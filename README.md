@@ -28,8 +28,8 @@ The ASX exchange charges 7 cents per trade.
 
 - When you buy stock, the total available volume should go down
 - When you sell stock, the total volume should go up.
-- Attempts to buy stock when insufficient volume is available should result in throwing InsufficientUnitsException warning and will continue to process the transaction.  The warning message is read as "Insufficient unit!  Current unit balance 999".
-- When the stock code is not pre-defined ie NAB, CBA, QAN, CXA or ASX, InvalidCodeException will be thrown and stop to process that particular transaction.  The error message is "Invalid Stock Code".
+- Attempts to buy stock when insufficient volume is available should result in throwing InsufficientUnitsException warning and will skip the current transaction and continue to process the rest of transactions..
+- When the stock code is not pre-defined ie NAB, CBA, QAN, CXA or ASX, InvalidCodeException will be thrown and stop to process the transactions for that particular stock code.
 - After the trading activity is complete, report the remaining volume and the income of the exchange
 
 ### Tech Debt/Outstanding
