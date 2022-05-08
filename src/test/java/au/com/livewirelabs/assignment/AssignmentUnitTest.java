@@ -18,4 +18,10 @@ public class AssignmentUnitTest {
 		assertNotNull(guiceService);
 	}
 
+	@Test
+	public void givenAssignmentInjectedInStockExchangeModule_ThenReturnValueIsNotNull() {
+		Injector injector = Guice.createInjector(new StockExchangeModule());
+		Assignment assignment = injector.getInstance(Assignment.class);
+		assertNotNull(assignment);
+	}
 }

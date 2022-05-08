@@ -63,6 +63,9 @@ public class Stock implements Serializable {
 
     public void addTotalCost(BigDecimal rate) {
         if (BigDecimal.ZERO.compareTo(rate) != 0) {
+            if (this.totalCost == null) {
+                this.totalCost = BigDecimal.ZERO;
+            }
             this.totalCost = this.totalCost.add(rate, new MathContext(2)).setScale(2, RoundingMode.HALF_UP);;
         }
     }

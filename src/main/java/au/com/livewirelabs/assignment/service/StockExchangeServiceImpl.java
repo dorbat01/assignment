@@ -9,6 +9,7 @@ import au.com.livewirelabs.assignment.model.Stock;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -35,12 +36,14 @@ public class StockExchangeServiceImpl implements StockExchangeService {
                 stockDao.save(trade);
                 printBalance(trade.getCode(), trade.getTotalVolume(), trade.getTotalCostStr());
             } else {
-                throw new InsufficientUnitsException(String.format("Insufficient units! The stock balance of %s is %d", code, trade.getTotalVolume()));
+                throw new InsufficientUnitsException(
+                        String.format("Insufficient units! The stock balance of %s is %d", code, trade.getTotalVolume()));
             }
         } catch (InvalidCodeException e) {
             throw e;
         } catch (NoResultException e) {
-            throw new InsufficientUnitsException(String.format("Insufficient units! The stock balance of %s is zero", code));
+            throw new InsufficientUnitsException(
+                    String.format("Insufficient units! The stock balance of %s is zero", code));
         }
     }
 
@@ -68,6 +71,9 @@ public class StockExchangeServiceImpl implements StockExchangeService {
     @Override
     public Map<String, Integer> getOrderBookTotalVolume() {
         List<Stock> stocks = stockDao.getAllStocks();
+        if (stocks == null) {
+            return new HashMap<>();
+        }
         Map<String, Integer> map = stocks.stream()
                 .collect(Collectors.toMap(stock -> stock.getCode(), stock -> stock.getTotalVolume()));
         return map;
@@ -76,6 +82,9 @@ public class StockExchangeServiceImpl implements StockExchangeService {
     @Override
     public BigDecimal getTradingCosts() {
         List<Stock> stocks = stockDao.getAllStocks();
+        if (stocks == null) {
+            return BigDecimal.ZERO;
+        }
         return stocks.stream().map((Stock stock) -> stock.getTotalCost()).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
